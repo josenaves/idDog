@@ -2,11 +2,14 @@ package com.josenaves.iddog.data.remote.api
 
 import com.josenaves.iddog.data.remote.api.dto.AuthRequest
 import com.josenaves.iddog.data.remote.api.dto.AuthResponse
+import com.josenaves.iddog.data.remote.api.dto.FeedResponse
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.Headers
-import retrofit2.http.POST
+import retrofit2.http.*
+
+const val HUSKY = "husky"
+const val HOUND = "hound"
+const val PUG = "pug"
+const val LABRADOR = "labrador"
 
 interface DogApi {
 
@@ -16,5 +19,5 @@ interface DogApi {
 
     @GET("feed")
     @Headers("Content-Type: application/json")
-    suspend fun getDogs() : Response<Any>
+    suspend fun getDogs(@Query("category") category: String? = HUSKY) : Response<FeedResponse>
 }
