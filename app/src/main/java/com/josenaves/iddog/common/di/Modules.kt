@@ -1,5 +1,7 @@
 package com.josenaves.iddog.common.di
 
+import com.josenaves.iddog.data.AuthRepository
+import com.josenaves.iddog.data.remote.AuthRemoteDatasource
 import com.josenaves.iddog.data.ConfigurationRepository
 import com.josenaves.iddog.data.local.ConfigurationLocalDatasource
 import com.josenaves.iddog.data.remote.api.DogApiClient
@@ -12,9 +14,10 @@ val applicationModule = module(override = true) {
     single { DogApiClient.create() }
 
     // datasources
+    single { AuthRemoteDatasource(get()) }
     single { ConfigurationLocalDatasource(androidContext()) }
 
     // repositories
-    single { ConfigurationRepository(get(), get()) }
-
+    single { ConfigurationRepository(get()) }
+    single { AuthRepository(get()) }
 }

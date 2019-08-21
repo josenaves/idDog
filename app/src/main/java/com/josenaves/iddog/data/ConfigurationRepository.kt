@@ -1,12 +1,8 @@
 package com.josenaves.iddog.data
 
-import android.content.Context
-import android.content.SharedPreferences
-
-class ConfigurationRepository(context: Context, private val local: ConfigurationDatasource) : ConfigurationDatasource {
+class ConfigurationRepository(private val local: ConfigurationDatasource) : ConfigurationDatasource {
 
     val TOKEN = "token"
-
 
     override suspend fun insert(key: String, value: String) {
         local.insert(key, value)

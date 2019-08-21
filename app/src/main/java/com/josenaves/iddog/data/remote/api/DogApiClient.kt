@@ -17,7 +17,8 @@ class DogApiClient {
 
         fun create(): DogApi {
 
-            val logger = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(TAG, it) })
+//            val logger = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(TAG, it) })
+            val logger = HttpLoggingInterceptor()
 
             logger.level =
                 if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
