@@ -1,6 +1,8 @@
 package com.josenaves.iddog.data
 
-class ConfigurationRepository(private val local: ConfigurationDatasource) : ConfigurationDatasource {
+import com.josenaves.iddog.data.local.ConfigurationLocalDatasource
+
+class ConfigurationRepository(private val local: ConfigurationLocalDatasource) : ConfigurationDatasource {
 
     val TOKEN = "token"
 
