@@ -1,12 +1,14 @@
 package com.josenaves.iddog.presentation.login
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.josenaves.iddog.R
-import org.koin.android.viewmodel.ext.android.viewModel
-
 import kotlinx.android.synthetic.main.activity_login.*
+import org.koin.android.scope.ext.android.bindScope
+import org.koin.android.scope.ext.android.getOrCreateScope
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
@@ -19,12 +21,33 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        setSupportActionBar(toolbar)
+        bindScope(getOrCreateScope(TAG))
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        buttonEnter.setOnClickListener {
+            Log.d(TAG, "clicou")
         }
+
+        setupObservers()
+    }
+
+    private fun setupObservers() {
+        viewModel.isLoading.observe(this, Observer {
+            val visible = it.getContentIfNotHandled() ?: false
+//            progress_bar.visibility = if (visible) View.VISIBLE else View.GONE
+        })
+
+//        viewModel.onDataReady.observe(this, Observer {
+//            val data = it.getContentIfNotHandled()
+//            Log.d(TAG, "data: $data")
+//
+//            data?.let { sectionList ->
+//                section_list.adapter =
+//                    SectionAdapter(sectionList, clickListener)
+//            }
+//
+//            section_list.visibility = View.VISIBLE
+//            progress_bar.visibility = View.GONE
+//        })
     }
 
 }
