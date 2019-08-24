@@ -12,12 +12,11 @@ class DogApiClient {
 
     companion object {
 
-        private const val TAG = "DogApiClient"
         private const val URL = "https://api-iddog.idwall.co/"
 
         fun create(): DogApi {
 
-            val logger = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { Log.d(TAG, it) })
+            val logger = HttpLoggingInterceptor()
 
             logger.level =
                 if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE

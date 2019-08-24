@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">idDog</string>
     <string name="title_activity_login">LoginActivity</string>
+    <string name="hint_email">Digite seu email</string>
+    <string name="button_enter">Entrar</string>
+    <string name="login_error_message">Erro inesperado - tente mais tarde!</string>
 </resources>
