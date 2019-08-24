@@ -13,7 +13,7 @@ import org.koin.dsl.module.module
 val applicationModule = module(override = true) {
 
     // view models
-    viewModel { LoginViewModel(get()) }
+    viewModel { LoginViewModel(get(), get()) }
 
     // repositories
     single { ConfigurationRepository(get()) }

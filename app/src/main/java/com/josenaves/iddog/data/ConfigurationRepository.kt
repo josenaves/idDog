@@ -2,9 +2,9 @@ package com.josenaves.iddog.data
 
 import com.josenaves.iddog.data.local.ConfigurationLocalDatasource
 
-class ConfigurationRepository(private val local: ConfigurationLocalDatasource) : ConfigurationDatasource {
+const val TOKEN = "token"
 
-    val TOKEN = "token"
+class ConfigurationRepository(private val local: ConfigurationLocalDatasource) : ConfigurationDatasource {
 
     override suspend fun insert(key: String, value: String) {
         local.insert(key, value)

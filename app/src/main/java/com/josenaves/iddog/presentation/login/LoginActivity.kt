@@ -1,10 +1,16 @@
 package com.josenaves.iddog.presentation.login
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import com.josenaves.iddog.R
+import com.josenaves.iddog.common.architecture.UiState
+import com.josenaves.iddog.presentation.dog.DogsActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import org.koin.android.scope.ext.android.bindScope
 import org.koin.android.scope.ext.android.getOrCreateScope
@@ -24,30 +30,44 @@ class LoginActivity : AppCompatActivity() {
         bindScope(getOrCreateScope(TAG))
 
         buttonEnter.setOnClickListener {
-            Log.d(TAG, "clicou")
+            viewModel.login(editTextEmail.text.toString())
         }
 
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.isLoading.observe(this, Observer {
-            val visible = it.getContentIfNotHandled() ?: false
-//            progress_bar.visibility = if (visible) View.VISIBLE else View.GONE
-        })
+        viewModel.uiState.observe(this, Observer {
+            when (val state = it.getContentIfNotHandled()) {
+                UiState.Loading -> disableWindow()
+                is UiState.Success -> {
+                    enableWindow()
+                    startActivity(Intent(this, DogsActivity::class.java))
+                }
+                is UiState.Error -> {
+                    Snackbar.make(
+                        root_view,
+                        getString(R.string.login_error_message),
+                        LENGTH_LONG
+                    ).show()
 
-//        viewModel.onDataReady.observe(this, Observer {
-//            val data = it.getContentIfNotHandled()
-//            Log.d(TAG, "data: $data")
-//
-//            data?.let { sectionList ->
-//                section_list.adapter =
-//                    SectionAdapter(sectionList, clickListener)
-//            }
-//
-//            section_list.visibility = View.VISIBLE
-//            progress_bar.visibility = View.GONE
-//        })
+                    enableWindow()
+                }
+            }
+        })
+    }
+
+    private fun disableWindow() {
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+        progressBar.visibility = View.VISIBLE
+    }
+
+    private fun enableWindow() {
+        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        progressBar.visibility = View.GONE
     }
 
 }
