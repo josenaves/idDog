@@ -12,9 +12,7 @@ import com.josenaves.iddog.R
 import com.josenaves.iddog.common.architecture.UiState
 import com.josenaves.iddog.presentation.dog.DogsActivity
 import kotlinx.android.synthetic.main.activity_login.*
-import org.koin.android.scope.ext.android.bindScope
-import org.koin.android.scope.ext.android.getOrCreateScope
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginActivity : AppCompatActivity() {
 
@@ -22,24 +20,23 @@ class LoginActivity : AppCompatActivity() {
         const val TAG = "LoginActivity"
     }
 
-    private val viewModel : LoginViewModel by viewModel()
+    private val vm : LoginViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        bindScope(getOrCreateScope(TAG))
 
         buttonEnter.setOnClickListener {
-            viewModel.login(editTextEmail.text.toString())
+            vm.login(editTextEmail.text.toString())
         }
 
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.uiState.observe(this, Observer {
-            when (val state = it.getContentIfNotHandled()) {
-                UiState.Loading -> disableWindow()
+        vm.uiState.observe(this, Observer {
+            when (it.getContentIfNotHandled()) {
+                is UiState.Loading -> disableWindow()
                 is UiState.Success -> {
                     enableWindow()
                     startActivity(Intent(this, DogsActivity::class.java))
@@ -47,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 is UiState.Error -> {
                     Snackbar.make(
                         root_view,
-                        getString(R.string.login_error_message),
+                        getString(R.string.unexpected_error_message),
                         LENGTH_LONG
                     ).show()
 
