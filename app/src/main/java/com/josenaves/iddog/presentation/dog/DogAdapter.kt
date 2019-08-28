@@ -10,21 +10,40 @@ import com.josenaves.iddog.R
 import com.josenaves.iddog.model.Dog
 
 class DogAdapter(private val dogList: List<Dog>,
-                 private val clickListener: (Dog) -> Unit
-): RecyclerView.Adapter<DogAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ViewHolder(
-            LayoutInflater
-                .from(parent.context)
-                .inflate(R.layout.image_layout, parent, false)
-        )
+                 private val clickListener: ((Dog) -> Unit)? = null
+): RecyclerView.Adapter<DogAdapter.DogViewHolder>() {
 
     override fun getItemCount() = dogList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DogViewHolder {
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.image_layout, parent, false)
+
+        return DogViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: DogViewHolder, position: Int) {
         val dog = dogList[position]
-//        holder.dogView.image = dog.title
+        holder.bindDog(dog)
+
+    }
+
+    class DogViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        private var view: View = v
+        private var dog : Dog? = null
+
+        private val image: ImageView = view.findViewById(R.id.dogImage)
+
+        fun bindDog(dog: Dog) {
+            this.dog = dog
+            Glide.with(view)
+                .load(dog.imageUrl)
+                .centerCrop()
+                .into(image)
+        }
+
+        //        holder.dogView.image = dog.title
 
 //        Glide.with(itemView)
 //            .load(dog.imageUrl)
@@ -34,13 +53,10 @@ class DogAdapter(private val dogList: List<Dog>,
 ////            .fallback(R.drawable.ic_no_image) //7
 //            .into(itemView.ivPhoto) //8
 
-        holder.dogImageView.setOnClickListener {
-            clickListener.invoke(dog)
-        }
-    }
+//        holder.dogImageView.setOnClickListener {
+//            clickListener.invoke(dog)
+//        }
 
-    class ViewHolder(row: View) : RecyclerView.ViewHolder(row) {
-        val dogImageView : ImageView = row.findViewById(R.id.dogImage)
     }
 
 }

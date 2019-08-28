@@ -24,7 +24,7 @@ class LoginViewModel(
     private val viewModelJob = Job()
     private val ioScope = CoroutineScope(Dispatchers.IO + viewModelJob)
 
-    val uiState = MutableLiveData<Event<UiState>>()
+    val uiState = MutableLiveData<Event<UiState<String>>>()
 
     override fun onCleared() {
         super.onCleared()
@@ -32,7 +32,7 @@ class LoginViewModel(
     }
 
     fun login(email: String) = ioScope.launch {
-        uiState.postValue(Event(UiState.Loading))
+        uiState.postValue(Event(UiState.Loading()))
         try {
             val token = authRepository.auth(email)
 

@@ -25,8 +25,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-//        bindScope(null)
-//        bindScope(getOrCreateScope(TAG))
 
         buttonEnter.setOnClickListener {
             vm.login(editTextEmail.text.toString())
@@ -37,8 +35,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun setupObservers() {
         vm.uiState.observe(this, Observer {
-            when (val state = it.getContentIfNotHandled()) {
-                UiState.Loading -> disableWindow()
+            when (it.getContentIfNotHandled()) {
+                is UiState.Loading -> disableWindow()
                 is UiState.Success -> {
                     enableWindow()
                     startActivity(Intent(this, DogsActivity::class.java))
@@ -46,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
                 is UiState.Error -> {
                     Snackbar.make(
                         root_view,
-                        getString(R.string.login_error_message),
+                        getString(R.string.unexpected_error_message),
                         LENGTH_LONG
                     ).show()
 
